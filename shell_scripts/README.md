@@ -1,0 +1,1 @@
+Bash scripts used to run ReservoirPy in parallell on a Linux machine
