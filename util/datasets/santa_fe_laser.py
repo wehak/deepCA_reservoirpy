@@ -15,15 +15,16 @@ def load_test_train_split(
     forecast = 1,
     plot=False
     ):
-    data_A = Path("deepCA/datasets/SantaFe.A.rda")
-    data_B = Path("deepCA/datasets/SantaFe.A.cont.rda")
 
-    # santafe_A = list(pyreadr.read_r(data_A)["SantaFe.A"]["V1"])
-    # santafe_A_cont = list(pyreadr.read_r(data_B)["SantaFe.A.cont"]["V1"])
+    # path to laser data
+    data_A = Path("util/datasets/SantaFe.A.rda")
+    data_B = Path("util/datasets/SantaFe.A.cont.rda")
 
-    # load and normalize data
+    # load data
     santafe_A = list(pyreadr.read_r(data_A)["SantaFe.A"]["V1"]) + list(pyreadr.read_r(data_B)["SantaFe.A.cont"]["V1"])
     santafe_A = np.array(santafe_A).reshape(-1, 1)
+
+    # normalize to [-1, 1]
     scaler = MinMaxScaler(
         feature_range=(-1, 1),
         # copy=False,
@@ -31,16 +32,14 @@ def load_test_train_split(
     scaler.fit(santafe_A)
     santafe_A = scaler.transform(santafe_A)
 
-
-    # forecast = len(santafe_A_cont)
-
+    # split into training and testing data
     X_train = np.array(santafe_A[:train_length])#.reshape(-1, 1)
     y_train = np.array(santafe_A[forecast: train_length + forecast])#.reshape(-1, 1)
 
     X_test = np.array(santafe_A[train_length: -forecast])#.reshape(-1, 1)
     y_test = np.array(santafe_A[train_length + forecast:])#.reshape(-1, 1)
 
-
+    # plot the data if desired
     if plot:
         plt.plot(range(0, train_length), X_train, ls="-", label="X train")
         plt.plot(range(forecast, train_length + forecast), y_train, ls=":", label="y train")
@@ -51,5 +50,6 @@ def load_test_train_split(
 
     return (X_train, X_test, y_train, y_test)
 
+# run test
 if __name__ == "__main__":
     load_test_train_split(plot=True)

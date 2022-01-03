@@ -3,19 +3,19 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 # custom functions
-from plot.utils import get_data
-from plot.utils import clean_data
+from plot_scripts.utils import get_data
+from plot_scripts.utils import clean_data
 
 """ parameters """
-filepath = Path("deepCA/output/data/celegans131_1")
+folder_path = Path("output/data/acc_testing/")
 
 """ program """
 # make a unique save folder
-savepath = Path(f"deepCA/output/figures")
+savepath = Path(f"output/excel/")
 savepath.mkdir(parents=True, exist_ok=True)
 
 # load and clean data
-data = get_data(filepath)
+data = get_data(folder_path)
 data.sort_values(by=["r2"], inplace=True, ascending=False)
-# data.to_csv(f"{savepath}/{filepath.stem}.csv")
-data.to_excel(f"{savepath}/{filepath.stem}.xlsx")
+# data.to_csv(f"{savepath}/{folder_path.stem}.csv")
+data.to_excel(f"{savepath}/{folder_path.stem}.xlsx")

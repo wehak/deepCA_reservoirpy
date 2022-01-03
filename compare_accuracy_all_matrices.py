@@ -7,7 +7,7 @@ import os
 import time
 
 import pandas as pd
-from tqdm import tqdm
+# from tqdm import tqdm
 
 from util.evaluation import initiate_train_and_test_ESN
 
@@ -34,7 +34,7 @@ if low is None or high is None:
     print("Must have a range")
     exit()
 elif folder_name is None:
-    print("Must have a folder name -f <name>")
+    print("Must have a output data folder name -f <name>")
     exit()
 
 """ parameters """
@@ -42,11 +42,11 @@ elif folder_name is None:
 trim_limit = None
 
 # path to parent folder containing all relevant adjacency matrices
-matrix_folder_path = Path("/home/wehak/code/reservoirpy/deepCA/adjacency matrices/celegans131matrix")
+matrix_folder_path = Path("input\celegans131matrix")
 
 # what datasets to test
-# datasets = ["mg", "santafe"]
-datasets = ["mg"]
+datasets = ["mg", "santafe"]
+# datasets = ["mg"]
 
 # what forecast levels to test
 forecast_levels = {
@@ -61,6 +61,7 @@ save_folder = Path(f"output/data/{folder_name}")
 save_folder.mkdir(parents=True, exist_ok=True)
 
 # find adjacency matrices. assume 2 level structure
+# alternatively, use rglob() to search folder and subfolders recursively
 adjacency_matrices = []
 for folder_lvl_1 in matrix_folder_path.glob("*"):
     for folder_lvl_2 in folder_lvl_1.glob("*"):
@@ -92,7 +93,7 @@ for i, adjacency_matrix in enumerate(adjacency_matrices[low:high], start=1):
                 leak_rate=0.25,
                 input_scaling=1.0,
                 input_connectivity=0.8,
-                regularization=1e-8,
+                regularization=1e-6,
                 seed=12345
                 ))
     # print(f"#{os.getpid()}: Trained \"{adjacency_matrix.stem}\" in {time.time() - t_start:.2f} s ({i+low}/{n+low})")

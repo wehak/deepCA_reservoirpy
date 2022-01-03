@@ -18,7 +18,7 @@ def load_test_train_split(
     ):
 
     # load and crop data
-    data_path = Path(f"deepCA/datasets/ETT-small/{dataset}.csv")
+    data_path = Path(f"util/datasets/ETT-small/{dataset}.csv")
     X = pd.read_csv(data_path)
     X.drop(columns=["date"], inplace=True)
     X = X.to_numpy()
@@ -57,5 +57,6 @@ def load_test_train_split(
 
     return (X_train, X_test, y_train, y_test)
 
+# run test
 if __name__ == "__main__":
     load_test_train_split(plot=True)
