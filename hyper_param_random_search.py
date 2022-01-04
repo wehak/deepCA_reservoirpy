@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from util.evaluation import initiate_train_and_test_ESN
 
 """parameters """
-adjacency_matrices = Path("/home/wehak/data/deepCA/adjacency matrices/celegans131matrix")
+adjacency_matrices = Path("input/celegans131matrix")
 
 # training datasets
 datasets = ["mg"]
@@ -63,7 +63,7 @@ if (folder_name is None) and (only_plot is False):
 elif (filename is None):
     print("Must have a input matrix -i <input matrix>")
     exit()
-save_folder = Path(f"deepCA/output/data/{folder_name}")
+save_folder = Path(f"output/data/{folder_name}")
 save_folder.mkdir(parents=True, exist_ok=True)
 
 # input

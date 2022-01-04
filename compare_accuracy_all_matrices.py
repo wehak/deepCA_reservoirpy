@@ -7,11 +7,30 @@ import os
 import time
 
 import pandas as pd
-# from tqdm import tqdm
+from tqdm import tqdm
 
 from util.evaluation import initiate_train_and_test_ESN
 
-""" parse launch parameters """
+""" parameters """
+# limit number of matrices tested of each type
+trim_limit = None
+
+# path to folder containing all relevant adjacency matrices
+matrix_folder_path = Path("input\celegans131matrix")
+
+# what datasets to test
+datasets = ["mg", "santafe"]
+# datasets = ["mg"]
+
+# what forecast levels to test
+forecast_levels = {
+    # "mg" : [50, 100, 200, 400],
+    # "santafe" : [1, 2, 4, 8],
+    "mg" : [50, 100, 200, 400],
+    "santafe" : [2, 4, 8, 16, 32],
+}
+
+""" parse parameters from terminal """
 # get input args
 low = None
 high = None
@@ -37,31 +56,16 @@ elif folder_name is None:
     print("Must have a output data folder name -f <name>")
     exit()
 
-""" parameters """
-# limit number of matrices tested of each type
-trim_limit = None
-
-# path to parent folder containing all relevant adjacency matrices
-matrix_folder_path = Path("input\celegans131matrix")
-
-# what datasets to test
-datasets = ["mg", "santafe"]
-# datasets = ["mg"]
-
-# what forecast levels to test
-forecast_levels = {
-    # "mg" : [50, 100, 200, 400],
-    # "santafe" : [1, 2, 4, 8],
-    "mg" : [50, 100, 200, 400],
-    "santafe" : [2, 4, 8, 16, 32],
-}
-
 # where to save the output files
 save_folder = Path(f"output/data/{folder_name}")
+
+""" program """
+
+# create output folder if not exist
 save_folder.mkdir(parents=True, exist_ok=True)
 
 # find adjacency matrices. assume 2 level structure
-# alternatively, use rglob() to search folder and subfolders recursively
+# (alternatively, use rglob() instead of glob() to search folder and subfolders recursively)
 adjacency_matrices = []
 for folder_lvl_1 in matrix_folder_path.glob("*"):
     for folder_lvl_2 in folder_lvl_1.glob("*"):
@@ -75,7 +79,7 @@ for folder_lvl_1 in matrix_folder_path.glob("*"):
             elif (n <= trim_limit):
                 adjacency_matrices.append(f)
 
-# print status to terminal
+# print start-status to terminal
 n = len(adjacency_matrices[low:high])
 p_id = os.getpid()
 print(f"{datetime.datetime.now().strftime('%H:%M:%S')}: #{p_id} processing {n} matrices [{low}, {high})")
@@ -83,7 +87,8 @@ print(f"{datetime.datetime.now().strftime('%H:%M:%S')}: #{p_id} processing {n} m
 # start the training
 t_start = time.time()
 results = []
-for i, adjacency_matrix in enumerate(adjacency_matrices[low:high], start=1):
+#for i, adjacency_matrix in enumerate(adjacency_matrices[low:high], start=1):
+for i, adjacency_matrix in enumerate(tqdm(adjacency_matrices[low:high]), start=1):
     for dataset in datasets:
         for forecast in forecast_levels[dataset]:
             results.append(initiate_train_and_test_ESN(
@@ -98,7 +103,7 @@ for i, adjacency_matrix in enumerate(adjacency_matrices[low:high], start=1):
                 ))
     # print(f"#{os.getpid()}: Trained \"{adjacency_matrix.stem}\" in {time.time() - t_start:.2f} s ({i+low}/{n+low})")
 
-# training complete, print status to terminal
+# training complete, print end-status to terminal
 print(f"{datetime.datetime.now().strftime('%H:%M:%S')}: #{p_id} trained [{low}, {high}) in {str(datetime.timedelta(seconds=time.time() - t_start)).split('.')[0]}")
 
 # convert to pandas dataframe to save data
