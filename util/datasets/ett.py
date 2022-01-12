@@ -32,13 +32,8 @@ def load_test_train_split(
     X = scaler.transform(X)
 
     # split X and y
-    y = X[: ,   -1]
+    y = X[: ,   -1].reshape(-1, 1)
     X = X[: ,   :-1]
-
-    print(X[0])
-    print(X.shape)
-    print(y[0])
-    print(y.shape)
 
     X_train = np.array(X[:train_length])#.reshape(-1, 1)
     y_train = np.array(y[forecast: train_length + forecast])#.reshape(-1, 1)

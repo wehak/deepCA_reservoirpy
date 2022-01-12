@@ -19,15 +19,15 @@ trim_limit = None
 matrix_folder_path = Path("input\celegans131matrix")
 
 # what datasets to test
-datasets = ["mg", "santafe"]
-# datasets = ["mg"]
+datasets = ["mg", "santafe", "lorenz", "ett"] # test all datasets
+# datasets = ["mg"] # only mackey-glass
 
-# what forecast levels to test
+# what forecast levels to test for each dataset
 forecast_levels = {
-    # "mg" : [50, 100, 200, 400],
-    # "santafe" : [1, 2, 4, 8],
-    "mg" : [50, 100, 200, 400],
-    "santafe" : [2, 4, 8, 16, 32],
+    "mg" : [100, 200, 400],
+    "santafe" : [5, 10, 20],
+    "lorenz" : [10, 20, 40],
+    # "ett" : [1, 2, 4] # not working?
 }
 
 """ parse parameters from terminal """

@@ -17,7 +17,7 @@ def make_plots(datapath, measures, show=False):
         exit()
     
     # make a unique save folder
-    savepath = Path(f"deepCA/output/figures/{datapath.stem}")
+    savepath = Path(f"output/figures/{datapath.stem}")
     # savepath = Path(f"deepCA/figures/{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}")
     savepath.mkdir(parents=True, exist_ok=True)
     
@@ -32,7 +32,7 @@ def make_plots(datapath, measures, show=False):
 
     print("Matrices =", len(df["filename"].unique()))
 
-    # delete "Real_Network"
+    # delete "Real_Network" (duplicate of "Real Network")
     delete_idxs = df[ df["filename:topology_type"] == "Real_Network"].index
     df.drop(delete_idxs, inplace=True)
 
@@ -96,5 +96,5 @@ def make_plots(datapath, measures, show=False):
 # make plots
 if __name__ == "__main__":
     make_plots(
-        Path("deepCA/output/data/celegans131_1"),
+        Path("output\data\demo"),
         measures=["r2", "nrmse"])

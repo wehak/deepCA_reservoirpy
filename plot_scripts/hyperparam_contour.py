@@ -10,7 +10,7 @@ from utils import get_data
 from utils import clean_data
 
 """ parameters """
-filepath = Path("/home/wehak/data/deepCA/output/data/celegans_random_hyperparam_sr4") # where to find data
+filepath = Path(r"output/data/celegans_random_hyperparam_sr4") # where to find data
 x_label = "input_connectivity" # x variable
 y_label = "leak_rate" # y variable
 z_labels = ["nrmse", "r2"] # quality measure

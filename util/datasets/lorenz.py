@@ -14,10 +14,14 @@ def load_test_train_split(
     X = lorenz(timesteps)
     X = 2 * (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0)) - 1
 
+    print(X.shape)
+    print(X[0])
+
     X_train, y_train = X[:train_length], X[forecast: train_length + forecast]
     X_test, y_test = X[train_length: -forecast], X[train_length + forecast:]
 
-
+    print(y_test.shape)
+    print(y_test[0])
 
     if plot:
         sample=1000 # number of samples to plot

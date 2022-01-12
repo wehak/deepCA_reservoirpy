@@ -7,7 +7,7 @@ from plot_scripts.utils import get_data
 from plot_scripts.utils import clean_data
 
 """ parameters """
-folder_path = Path("output/data/acc_testing/")
+folder_path = Path("output\data\demo")
 
 """ program """
 # make a unique save folder

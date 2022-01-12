@@ -74,14 +74,14 @@ def initiate_train_and_test_ESN(
         X_train, X_test, y_train, y_test = ett.load_test_train_split(
             timesteps=60000,
             train_length=50000,
-            forecast=1,
+            forecast=forecast,
         )
 
     elif dataset == "lorenz":
         X_train, X_test, y_train, y_test = lorenz.load_test_train_split(
             timesteps=25000,
             train_length=20000,
-            forecast=1,
+            forecast=forecast,
         )
     
     else:
@@ -121,7 +121,8 @@ def initiate_train_and_test_ESN(
     # reservoir.train(
     states = reservoir.train(
         X_train,
-        y_train.reshape(-1, 1),
+        y_train,
+        # y_train.reshape(-1, 1),
         return_states=True,
         # verbose=True
         )
@@ -170,9 +171,8 @@ if __name__ == "__main__":
     results = []
     results.append(initiate_train_and_test_ESN(
         matrix,
-        # dataset="mg",
-        dataset="lorenz",
-        forecast=1,
+        dataset="mg",
+        forecast=200,
         regularization=1e-6
         ))
     
